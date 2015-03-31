@@ -1,0 +1,37 @@
+package tanks;
+
+public class part1 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		
+		System.out.println(getQuadrant("c", "3"));
+		
+		printCoordinates("b", "3");
+		
+	}
+
+/**
+ *   - TANKS-	
+ * @param v
+ * @param h
+ * @return
+ */
+	static String getQuadrant(String v, String h){
+		String vertical="abcdefghi";
+		String horizontal="123456789";
+		int y=vertical.indexOf(v)*64;
+		int x=horizontal.indexOf(h)*64;
+		return x+"_"+y;
+		
+		
+	}
+	static void printCoordinates(String v,String h){
+		String coordinates=getQuadrant(v, h);
+		String x = coordinates.substring(0,coordinates.indexOf("_"));
+		String y = coordinates.substring(coordinates.indexOf("_")+1);
+		
+		System.out.println(v + h +":("+ x + "px; "+ y +"px)" );
+	}
+}
