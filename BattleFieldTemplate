@@ -1,11 +1,13 @@
 /*
  * Copyright (c) 2014 kademika.com
  */
-package project0;
+//   package Practicum;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.Random;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
@@ -19,27 +21,84 @@ public class BattleFieldTemplate extends JPanel {
 	
 	long speed = 225;
 	
+	
 	/**
 	 * Write your code here.
 	 */
 	void runTheGame() throws Exception {
-		int step =64;
-		int direction =0;
+//		move(4);
+		moveRandome();
+			
 		
-		while (tankX<512){
-			tankX+=step;
-			repaint();
-			Thread.sleep(500);
+		//		int step =64;
+//		int i=0;
+//		int direction =0;
+//		
+//		while (true){
+//			if(direction ==0 && i<8){
+//				tankX+=step;
+//				i++;
+//			}
+//			else {
+//				tankX-=step;
+//				i--;	
+//			}
+//			
+//			
+//			if (i==8){
+//				direction=1;
+//			}else if (i==0) {
+//				direction=0;
+//			}
+//			repaint();
+//			Thread.sleep(speed);
+//		}
+//		
+//		
+//		
+	}
+	
+	void move(int direction) throws Exception {
+		int step = 64;
+		
+		if ((tankY==0 && direction==1) || (tankY==512 && direction==2) || (tankX==0 && direction==3) ||	(tankX ==512 && direction ==4)) {
+			System.out.println("I cant move");
+			return;
 		}
 		
-		
-		
-	}
+		if (direction==1){
+			tankY-=step;
+			System.out.print("Go up.");
+		}else if (direction==2) {
+			tankY+=step;
+			System.out.print("Go down.");
+		}else if (direction==3) {
+			tankX-=step;
+			System.out.print("Go left.");
+		}else if (direction==4){
+			tankX+=step;
+			System.out.print("Go right.");
+		}else {
+			System.out.println("Wrong direction");
+		}
+		Thread.sleep(225);
+		repaint();
+		System.out.println(" I move to " +tankX+":"+tankY);
+		}
 	
-	void move(int direction) {
+	
 
+		
 	
+
+	static String getQuadrant(String v, String h){
+		String vertical="abcdefghi";
+		String horizontal="123456789";
+		int y=vertical.indexOf(v)*64;
+		int x=horizontal.indexOf(h)*64;
+		return x+"_"+y;
 	}
+	
 	// Magic bellow. Do not worry about this now, you will understand everything in this course.
 	// Please concentrate on your tasks only.
 
