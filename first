@@ -1,37 +1,163 @@
-package tanks;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.util.Random;
 
-public class part1 {
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+public class BattleFieldTemplate extends JPanel {
 
-		
-		System.out.println(getQuadrant("c", "3"));
-		
-		printCoordinates("b", "3");
-		
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	boolean COLORDED_MODE = true;
+
+	int tankX = 0;
+	int tankY = 0;
+
+	long speed = 225;
+
+	/**
+	 * Write your code here.
+	 */
+	void runTheGame() throws Exception {
+//		moveToQaudrant("g", "6");
+//		moveToQaudrant("a", "2");
+
+		moveRandome();
 	}
 
-/**
- *   - TANKS-	
- * @param v
- * @param h
- * @return
- */
-	static String getQuadrant(String v, String h){
-		String vertical="abcdefghi";
-		String horizontal="123456789";
-		int y=vertical.indexOf(v)*64;
-		int x=horizontal.indexOf(h)*64;
-		return x+"_"+y;
-		
-		
+	static String getQuadrant(String v, String h) {
+		String vertical = "abcdefghi";
+		String horizontal = "123456789";
+		int y = vertical.indexOf(v) * 64;
+		int x = horizontal.indexOf(h) * 64;
+		return x + "_" + y;
+
 	}
-	static void printCoordinates(String v,String h){
-		String coordinates=getQuadrant(v, h);
-		String x = coordinates.substring(0,coordinates.indexOf("_"));
-		String y = coordinates.substring(coordinates.indexOf("_")+1);
-		
-		System.out.println(v + h +":("+ x + "px; "+ y +"px)" );
+	void moveRandome() throws Exception {
+
+		Random r = new Random();
+		int i;
+		while (true) {
+			i = r.nextInt(4)+1;
+				move(i);
+			
+		}
+
 	}
+
+	void move(int direction) throws Exception {
+		int step = 64;
+
+		if ((tankY == 0 && direction == 1) || (tankY == 512 && direction == 2)
+				|| (tankX == 0 && direction == 3)
+				|| (tankX == 512 && direction == 4)) {
+			System.out.println("I cant move");
+			return;
+		}
+
+		if (direction == 1) {
+			tankY -= step;
+			System.out.print("Go up.");
+		} else if (direction == 2) {
+			tankY += step;
+			System.out.print("Go down.");
+		} else if (direction == 3) {
+			tankX -= step;
+			System.out.print("Go left.");
+		} else if (direction == 4) {
+			tankX += step;
+			System.out.print("Go right.");
+		} else {
+			System.out.println("Wrong direction");
+		}
+		Thread.sleep(225);
+		repaint();
+		System.out.println(" I move to " + tankX + ":" + tankY);
+	}
+
+	void moveToQaudrant(String v, String h) throws Exception {
+		String dastination = getQuadrant(v, h);
+		System.out.println("Dastination point is:" + dastination);
+		int dastinationHorizontal = Integer.parseInt(dastination.substring(0,
+				dastination.indexOf("_")));
+		int dastinationVertical = Integer.parseInt(dastination
+				.substring(dastination.indexOf("_") + 1));
+
+		// System.out.println(dastinationVertical);
+		// System.out.println(dastinationHorizontal);
+		// теперь будем двигать танк к заданім координатам
+
+		while (tankX != dastinationHorizontal) {
+			if (tankX < dastinationHorizontal) {
+				move(4);
+			} else {
+				move(3);
+			}
+		}
+		while (tankY != dastinationVertical) {
+			if (tankY < dastinationVertical) {
+				move(2);
+			} else {
+				move(1);
+			}
+
+		}
+
+	}
+
+	// Magic bellow. Do not worry about this now, you will understand everything
+	// in this course.
+	// Please concentrate on your tasks only.
+
+	final int BF_WIDTH = 576;
+	final int BF_HEIGHT = 576;
+
+	public static void main(String[] args) throws Exception {
+		BattleFieldTemplate bf = new BattleFieldTemplate();
+		bf.runTheGame();
+	}
+
+	public BattleFieldTemplate() throws Exception {
+		JFrame frame = new JFrame("BATTLE FIELD, DAY 2");
+		frame.setLocation(500, 150);
+		frame.setMinimumSize(new Dimension(BF_WIDTH, BF_HEIGHT + 22));
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		frame.getContentPane().add(this);
+		frame.pack();
+		frame.setVisible(true);
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+
+		int i = 0;
+		Color cc;
+		for (int v = 0; v < 9; v++) {
+			for (int h = 0; h < 9; h++) {
+				if (COLORDED_MODE) {
+					if (i % 2 == 0) {
+						cc = new Color(252, 241, 177);
+					} else {
+						cc = new Color(233, 243, 255);
+					}
+				} else {
+					cc = new Color(180, 180, 180);
+				}
+				i++;
+				g.setColor(cc);
+				g.fillRect(h * 64, v * 64, 64, 64);
+			}
+		}
+
+		g.setColor(new Color(255, 0, 0));
+		g.fillRect(tankX, tankY, 64, 64);
+	}
+
 }
