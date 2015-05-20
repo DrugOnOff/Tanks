@@ -49,6 +49,11 @@ public class BattleFieldTemplate2 extends JPanel {
 	 * Write your code here.
 	 */
 	void runTheGame() throws Exception {
+		
+//		processInterception();
+//		bulletX = 10;
+//		bulletY = 10;
+//		processInterception();
 		fire();
 		fire();
 		fire();
@@ -62,16 +67,26 @@ public class BattleFieldTemplate2 extends JPanel {
 	}
 	
 	boolean processInterception() {
+		String coordinates=getQuadrant(bulletX, bulletY);
+		int y= Integer.parseInt(coordinates.split("_")[0]);
+		int x= Integer.parseInt(coordinates.split("_")[1]);
+		
+		if ((y>=0 && y<=9)&&(x>=0 && x<=9)) {
+			if (!battleField[y][x].trim().isEmpty()) {
+				battleField[y][x]= " ";
+				return true;
+			}
+		}
 		return false;
 	}
 	
 	String getQuadrant(int x, int y) {
-		return null;
+		return y/64+"_"+x/64;
 	}
 	
 	void fire() throws Exception {
-		int bulletX = tankX + 25;
-		int bulletY = tankY + 25;
+		bulletX = tankX + 25;
+		bulletY = tankY + 25;
 		int step =1;
 		while ((bulletX>-14 && bulletX<590) && (bulletY>-14 && bulletY<590)){
 		if (tankDirection == 1) {
@@ -82,6 +97,11 @@ public class BattleFieldTemplate2 extends JPanel {
 			bulletX -= step;
 		} else {
 			bulletX += step;
+		}
+		
+		if(processInterception()){
+			bulletX = -100;
+			bulletY = -100;	
 		}
 		repaint();
 		Thread.sleep(bulletSpeed);
